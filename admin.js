@@ -132,6 +132,8 @@ const pImage = document.getElementById("p-image");
 const pImageCustom = document.getElementById("p-image-custom");
 const pDownload = document.getElementById("p-download");
 const downloadFileGroup = document.getElementById("download-file-group");
+const pPayLink = document.getElementById("p-paylink");
+const pIsFree = document.getElementById("p-is-free");
 
 // Specs generator inputs
 const specKeyInput = document.getElementById("spec-key");
@@ -146,6 +148,91 @@ const btnExportDb = document.getElementById("btn-export-db");
 const importDbFile = document.getElementById("import-db-file");
 const btnResetDb = document.getElementById("btn-reset-db");
 const btnClearOrders = document.getElementById("btn-clear-orders");
+
+// --- Custom Toast Notification Engine ---
+const toastStyle = document.createElement("style");
+toastStyle.textContent = `
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+.toast-notification {
+    background: #121418;
+    color: #f5f6f8;
+    border: 2px solid var(--color-iron-dark);
+    padding: 14px 22px;
+    border-radius: 4px;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 300px;
+    transform: translateX(120%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: auto;
+}
+.toast-notification.active {
+    transform: translateX(0);
+    opacity: 1;
+}
+.toast-success {
+    border-color: var(--color-neon-green) !important;
+    box-shadow: 0 0 10px var(--color-neon-green-glow) !important;
+}
+.toast-success::before {
+    content: "⚙️";
+    font-size: 1.1rem;
+}
+.toast-danger {
+    border-color: var(--color-neon-orange) !important;
+    box-shadow: 0 0 10px var(--color-neon-orange-glow) !important;
+}
+.toast-danger::before {
+    content: "⚠️";
+    font-size: 1.1rem;
+}
+.toast-info {
+    border-color: var(--color-neon-cyan) !important;
+    box-shadow: 0 0 10px var(--color-neon-cyan-glow) !important;
+}
+.toast-info::before {
+    content: "🔧";
+    font-size: 1.1rem;
+}
+`;
+document.head.appendChild(toastStyle);
+
+const toastContainer = document.createElement("div");
+toastContainer.className = "toast-container";
+document.body.appendChild(toastContainer);
+
+function showToast(message, type = 'success') {
+    const toast = document.createElement("div");
+    toast.className = `toast-notification toast-${type}`;
+    toast.textContent = " " + message;
+    
+    toastContainer.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.add("active");
+    }, 10);
+    
+    setTimeout(() => {
+        toast.classList.remove("active");
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }, 3000);
+}
 
 // --- Initializing Admin Panel ---
 function init() {
@@ -323,8 +410,21 @@ function editProduct(id) {
     formProductId.value = product.id;
     pTitle.value = product.title;
     pCategory.value = product.category;
-    pPrice.value = product.price;
     pDesc.value = product.description;
+    
+    const isFree = product.isFree || product.price === 0;
+    pIsFree.checked = isFree;
+    if (isFree) {
+        pPrice.value = "0";
+        pPrice.disabled = true;
+        pPayLink.value = "";
+        pPayLink.disabled = true;
+    } else {
+        pPrice.value = product.price;
+        pPrice.disabled = false;
+        pPayLink.value = product.paymentLink || "";
+        pPayLink.disabled = false;
+    }
     
     // Toggle image selectors
     if (product.image.startsWith("assets/images/")) {
@@ -361,7 +461,7 @@ function addSpec() {
     const val = specValInput.value.trim();
 
     if (!key || !val) {
-        alert("Introduce ambos parámetros de la especificación técnica.");
+        showToast("Introduce ambos parámetros de la especificación técnica.", "danger");
         return;
     }
 
@@ -402,11 +502,28 @@ function cancelEdit() {
     tempSpecs = {};
     renderSpecsBadges();
     pImageCustom.classList.add("hidden");
+    pPayLink.value = "";
+    pIsFree.checked = false;
+    pPrice.disabled = false;
+    pPayLink.disabled = false;
     downloadFileGroup.classList.remove("hidden"); // default archivos show
 }
 
 // Setup Form listeners
 function setupFormEventListeners() {
+    // Checkbox isFree change listener
+    pIsFree.addEventListener("change", (e) => {
+        if (e.target.checked) {
+            pPrice.value = "0";
+            pPrice.disabled = true;
+            pPayLink.value = "";
+            pPayLink.disabled = true;
+        } else {
+            pPrice.disabled = false;
+            pPayLink.disabled = false;
+        }
+    });
+
     // Show custom image URL input if selected
     pImage.addEventListener("change", (e) => {
         if (e.target.value === "custom") {
@@ -436,9 +553,11 @@ function setupFormEventListeners() {
         e.preventDefault();
 
         const title = pTitle.value.trim();
-        const price = parseFloat(pPrice.value);
+        const isFree = pIsFree.checked;
+        const price = isFree ? 0 : parseFloat(pPrice.value);
         const desc = pDesc.value.trim();
         const category = pCategory.value;
+        const paymentLink = isFree ? "" : pPayLink.value.trim();
         
         let image = pImage.value;
         if (image === "custom") {
@@ -446,7 +565,7 @@ function setupFormEventListeners() {
         }
 
         if (!title || isNaN(price) || !desc || !image) {
-            alert("Por favor completa los campos obligatorios.");
+            showToast("Por favor completa los campos obligatorios.", "danger");
             return;
         }
 
@@ -467,10 +586,12 @@ function setupFormEventListeners() {
                     description: desc,
                     image,
                     specs: { ...tempSpecs },
+                    paymentLink,
+                    isFree,
                     ...(category === "archivos" ? { downloadFile } : {})
                 };
             }
-            alert("Especificaciones de la pieza actualizadas con éxito.");
+            showToast("Especificaciones de la pieza actualizadas con éxito.", "success");
         } else {
             // Create
             const newId = `prod-${category}-${Date.now()}`;
@@ -482,10 +603,12 @@ function setupFormEventListeners() {
                 description: desc,
                 image,
                 specs: { ...tempSpecs },
+                paymentLink,
+                isFree,
                 ...(category === "archivos" ? { downloadFile } : {})
             };
             products.push(newProduct);
-            alert("Nueva pieza agregada al catálogo e inventario.");
+            showToast("Nueva pieza agregada al catálogo e inventario.", "success");
         }
 
         saveProductsDatabase();
@@ -587,12 +710,12 @@ function setupBackupListeners() {
                     products = importedProducts;
                     saveProductsDatabase();
                     renderProductsTable();
-                    alert("Inventario cargado y sincronizado con éxito.");
+                    showToast("Inventario cargado y sincronizado con éxito.", "success");
                 } else {
-                    alert("Error: El archivo JSON cargado no posee el formato de inventario correcto.");
+                    showToast("Error: El archivo JSON cargado no posee el formato de inventario correcto.", "danger");
                 }
             } catch (err) {
-                alert("Error al leer el archivo JSON: formato inválido.");
+                showToast("Error al leer el archivo JSON: formato inválido.", "danger");
             }
         };
         reader.readAsText(file);
@@ -613,7 +736,7 @@ function setupBackupListeners() {
             renderProductsTable();
             renderOrdersTable();
             
-            alert("Caldera restablecida a los valores originales de fábrica.");
+            showToast("Caldera restablecida a los valores originales de fábrica.", "info");
         }
     });
 

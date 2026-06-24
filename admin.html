@@ -167,7 +167,12 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="p-price">PRECIO ($)</label>
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                                    <label for="p-price" style="margin-bottom:0;">PRECIO ($)</label>
+                                    <label for="p-is-free" style="display:inline-flex; align-items:center; gap:5px; font-size:0.8rem; cursor:pointer; color:var(--color-brass);">
+                                        <input type="checkbox" id="p-is-free" style="width:auto; margin:0;"> PIEZA GRATUITA
+                                    </label>
+                                </div>
                                 <input type="number" id="p-price" required step="0.01" min="0" placeholder="0.00">
                             </div>
                         </div>
@@ -175,6 +180,11 @@
                         <div class="form-group">
                             <label for="p-desc">DESCRIPCIÓN DE LA PIEZA</label>
                             <textarea id="p-desc" required placeholder="Escribe el detalle e historia de la pieza industrial..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="p-paylink">LINK DE PAGO (OPCIONAL)</label>
+                            <input type="url" id="p-paylink" placeholder="Ej. https://mpago.la/xxxxxx">
                         </div>
 
                         <div class="form-row">

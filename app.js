@@ -293,8 +293,16 @@ function renderProducts() {
         card.className = `product-card ${p.category}-tag`;
         card.id = `card-${p.id}`;
         
+        const isFree = p.isFree || p.price === 0;
+        const isDigital = p.category === "archivos";
+        
         card.innerHTML = `
             <span class="product-badge ${p.category}-badge">${p.category === 'archivos' ? 'Archivo 3D' : p.category}</span>
+            <button class="btn-details" data-id="${p.id}" title="Ver especificaciones" aria-label="Ver detalles de ${p.title}">
+                <svg viewBox="0 0 24 24" width="18" height="18">
+                    <path fill="currentColor" d="M11,9H13V7H11V9M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M11,17H13V11H11V17Z" />
+                </svg>
+            </button>
             <div class="product-img-wrapper">
                 <img src="${p.image}" alt="${p.title}" class="product-img" loading="lazy">
             </div>
@@ -302,14 +310,14 @@ function renderProducts() {
                 <h3 class="product-title">${p.title}</h3>
                 <p class="product-desc">${p.description}</p>
                 <div class="product-footer-row">
-                    <span class="product-price">$${p.price.toFixed(2)}</span>
+                    ${isFree ? `<span class="product-price free-price">GRATIS</span>` : `<span class="product-price">$${p.price.toFixed(2)}</span>`}
                     <div class="action-btn-group">
-                        <button class="btn-details" data-id="${p.id}" title="Ver especificaciones" aria-label="Ver detalles de ${p.title}">
-                            <svg viewBox="0 0 24 24" width="20" height="20">
-                                <path fill="currentColor" d="M11,9H13V7H11V9M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M11,17H13V11H11V17Z" />
-                            </svg>
-                        </button>
-                        <button class="btn-buy" data-id="${p.id}">CARGAR</button>
+                        ${isFree && isDigital ? `
+                            <button class="btn-buy btn-direct-download" data-file="${p.downloadFile || 'modelo_3d.stl'}">DESCARGAR</button>
+                        ` : `
+                            ${p.paymentLink ? `<a href="${p.paymentLink}" target="_blank" class="btn-buy btn-pay-now" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">PAGAR</a>` : ''}
+                            <button class="btn-buy" data-id="${p.id}">CARGAR</button>
+                        `}
                     </div>
                 </div>
             </div>
@@ -325,8 +333,13 @@ function renderProducts() {
     // Attach listeners to newly created buttons
     productGrid.querySelectorAll(".btn-buy").forEach(b => {
         b.addEventListener("click", (e) => {
-            const id = e.currentTarget.getAttribute("data-id");
-            addToCart(id);
+            if (e.currentTarget.classList.contains("btn-direct-download")) {
+                const filename = e.currentTarget.getAttribute("data-file");
+                simulateDownload(filename);
+            } else {
+                const id = e.currentTarget.getAttribute("data-id");
+                addToCart(id);
+            }
         });
     });
 
@@ -443,6 +456,9 @@ function openDetails(id) {
         specsHtml += `<li><strong>${key.toUpperCase()}:</strong> <span>${val}</span></li>`;
     }
 
+    const isFree = product.isFree || product.price === 0;
+    const isDigital = product.category === "archivos";
+
     detailsContent.innerHTML = `
         <div class="dialog-header">
             <h2>${product.title}</h2>
@@ -462,8 +478,15 @@ function openDetails(id) {
                     </ul>
                 </div>
                 <div class="dialog-footer">
-                    <span class="dialog-price">$${product.price.toFixed(2)}</span>
-                    <button class="btn-buy" id="dialog-buy-btn" data-id="${product.id}">AÑADIR A CARGA</button>
+                    ${isFree ? `<span class="dialog-price free-price">GRATIS</span>` : `<span class="dialog-price">$${product.price.toFixed(2)}</span>`}
+                    <div style="display:flex; gap:10px;">
+                        ${isFree && isDigital ? `
+                            <button class="btn-buy btn-direct-download-details" data-file="${product.downloadFile || 'modelo_3d.stl'}">DESCARGAR AHORA</button>
+                        ` : `
+                            ${product.paymentLink ? `<a href="${product.paymentLink}" target="_blank" class="btn-buy btn-pay-now" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">PAGAR AHORA</a>` : ''}
+                            <button class="btn-buy" id="dialog-buy-btn" data-id="${product.id}">AÑADIR A CARGA</button>
+                        `}
+                    </div>
                 </div>
             </div>
         </div>
@@ -477,11 +500,23 @@ function openDetails(id) {
         detailsDialog.close();
     });
 
-    document.getElementById("dialog-buy-btn").addEventListener("click", (e) => {
-        const pid = e.currentTarget.getAttribute("data-id");
-        addToCart(pid);
-        detailsDialog.close();
-    });
+    const downloadBtnDetails = detailsContent.querySelector(".btn-direct-download-details");
+    if (downloadBtnDetails) {
+        downloadBtnDetails.addEventListener("click", (e) => {
+            const filename = e.currentTarget.getAttribute("data-file");
+            simulateDownload(filename);
+            detailsDialog.close();
+        });
+    }
+
+    const buyBtnDetails = document.getElementById("dialog-buy-btn");
+    if (buyBtnDetails) {
+        buyBtnDetails.addEventListener("click", (e) => {
+            const pid = e.currentTarget.getAttribute("data-id");
+            addToCart(pid);
+            detailsDialog.close();
+        });
+    }
 }
 
 // --- Checkout & Invoice Simulation ---
@@ -497,6 +532,8 @@ function runCheckout() {
     let itemsHtml = "";
     let containsDownloads = false;
     let downloadsHtml = "";
+    let containsPaymentLinks = false;
+    let paymentLinksHtml = "";
     
     cart.forEach(item => {
         const itemTotal = item.price * item.quantity;
@@ -505,6 +542,15 @@ function runCheckout() {
         itemsHtml += `
 ${item.title.substring(0, 20).padEnd(20)} ${item.quantity.toString().padStart(3)} $${itemTotal.toFixed(2).padStart(8)}
 `;
+        
+        if (item.paymentLink) {
+            containsPaymentLinks = true;
+            paymentLinksHtml += `
+<div class="download-link-item" style="margin-bottom: 8px;">
+    <span>[Pago] ${item.title.substring(0, 18)}</span>
+    <a href="${item.paymentLink}" target="_blank" class="download-file-btn" style="text-decoration:none; display:inline-block; font-size:0.7rem; padding:2px 6px;">PAGAR</a>
+</div>`;
+        }
         
         if (item.category === "archivos") {
             containsDownloads = true;
@@ -543,6 +589,17 @@ TOTAL FACTURADO:        $${grandTotal.toFixed(2).padStart(8)}
 <p style="font-size: 0.75rem; text-align: center; margin-top: 10px;">
     Gracias por alimentar la caldera del taller digital.
 </p>
+${containsPaymentLinks ? `
+<div class="invoice-divider"></div>
+<div class="download-links-container" style="border-color: #ff5500; margin-bottom: 10px;">
+    <h4 style="margin-bottom: 8px; font-size: 0.8rem; font-weight: bold; color: #ff5500;">LINKS DE PAGO DIRECTO:</h4>
+    ${paymentLinksHtml}
+    <div style="background: rgba(255, 85, 0, 0.08); border: 1px dashed #ff5500; padding: 8px; margin-top: 10px; font-size: 0.72rem; text-align: center; line-height: 1.3; color: var(--color-text-dark);">
+        <strong>📢 ACCIÓN REQUERIDA:</strong><br>
+        Una vez efectuado el pago, presiona el botón verde de abajo para enviarnos tu comprobante por WhatsApp y despachar tus piezas.
+    </div>
+</div>
+` : ''}
 ${containsDownloads ? `
 <div class="invoice-divider"></div>
 <div class="download-links-container">
@@ -585,7 +642,7 @@ ${containsDownloads ? `
     localStorage.setItem("diesel_orders", JSON.stringify(existingOrders));
 
     // Configure WhatsApp redirect
-    setupWhatsAppBtn(invoiceId, grandTotal);
+    setupWhatsAppBtn(invoiceId, grandTotal, containsPaymentLinks);
 
     // Empty cart state now that purchase is made
     cart = [];
@@ -593,7 +650,7 @@ ${containsDownloads ? `
     updateCartUI();
 }
 
-function setupWhatsAppBtn(invoiceId, total) {
+function setupWhatsAppBtn(invoiceId, total, hasPaymentLinks) {
     // Generate text for WhatsApp
     let waText = `🛠️ *Boutique3D* 🛠️\n`;
     waText += `*Orden de Compra:* ${invoiceId}\n`;
@@ -605,7 +662,12 @@ function setupWhatsAppBtn(invoiceId, total) {
     
     waText += `------------------------------------\n`;
     waText += `*Total:* $${(total).toFixed(2)}\n\n`;
-    waText += `¡Hola! Me gustaría coordinar el pago de mi pedido y ultimar detalles (personalizaciones/envío).`;
+    
+    if (hasPaymentLinks) {
+        waText += `¡Hola! Ya realicé el pago de mi pedido mediante el link de pago directo. Aquí adjunto el comprobante del ticket para despachar el envío de mis piezas.`;
+    } else {
+        waText += `¡Hola! Me gustaría coordinar el pago de mi pedido y ultimar detalles (personalizaciones/envío).`;
+    }
     
     const encodedText = encodeURIComponent(waText);
     // Dummy whatsapp phone number

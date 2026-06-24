@@ -787,22 +787,29 @@ body.diesel-theme {
 }
 
 .btn-details {
-    background: transparent;
-    border: 2px solid var(--color-iron-dark);
-    color: var(--color-text-muted);
-    width: 40px;
-    height: 40px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 10;
+    background: rgba(25, 27, 34, 0.85);
+    border: 1px solid var(--color-iron-dark);
+    color: var(--color-text-light);
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     border-radius: 4px;
+    backdrop-filter: blur(4px);
     transition: all var(--transition-speed);
 }
 
 .btn-details:hover {
-    border-color: var(--color-steel);
-    color: var(--color-text-light);
+    border-color: var(--color-brass);
+    color: var(--color-brass);
+    background: var(--color-bg-card);
+    box-shadow: 0 0 10px rgba(203, 161, 84, 0.3);
 }
 
 /* Mechanical Click Action Button */
@@ -1386,7 +1393,7 @@ body.diesel-theme {
     max-width: 1400px;
     margin: 0 auto 40px auto;
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr;
     gap: 40px;
 }
 
@@ -1461,3 +1468,131 @@ body.diesel-theme {
         opacity: 0.8;
     }
 }
+
+/* ==========================================================================
+   ADDED ELEMENTS (Payment links, WhatsApp and Socials)
+   ========================================================================== */
+
+/* Pay Now Button Style Override */
+.btn-pay-now {
+    border-color: var(--color-neon-orange) !important;
+    color: var(--color-neon-orange) !important;
+}
+
+.btn-pay-now:hover {
+    background: var(--color-neon-orange) !important;
+    color: var(--color-bg-deep) !important;
+    box-shadow: var(--shadow-neon-orange) !important;
+}
+
+/* WhatsApp Floating Button */
+.whatsapp-float {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 56px;
+    height: 56px;
+    background-color: #25d366;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.2);
+    z-index: 999;
+    border: 3px solid var(--color-iron-dark);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    text-decoration: none;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+    border-color: var(--color-brass);
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.6), 0 0 15px rgba(203, 161, 84, 0.4);
+    color: #fff;
+}
+
+.whatsapp-float svg {
+    transition: transform 0.3s ease;
+}
+
+.whatsapp-float:hover svg {
+    transform: rotate(10deg);
+}
+
+.whatsapp-glow {
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border-radius: 50%;
+    border: 3px solid #25d366;
+    opacity: 0;
+    animation: whatsapp-pulse 2s infinite;
+    pointer-events: none;
+}
+
+@keyframes whatsapp-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1.3);
+        opacity: 0;
+    }
+}
+
+/* Social links in Footer */
+.footer-social-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-social-links li {
+    margin-bottom: 12px;
+}
+
+.footer-social-links a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.footer-social-links a:hover {
+    color: var(--color-brass);
+    text-shadow: 0 0 8px rgba(203, 161, 84, 0.4);
+}
+
+.footer-social-links svg {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Free price tag style */
+.free-price {
+    color: var(--color-neon-cyan) !important;
+    text-shadow: 0 0 8px rgba(0, 229, 255, 0.5) !important;
+    font-weight: bold;
+}
+
+/* Direct download button style */
+.btn-direct-download, .btn-direct-download-details {
+    border-color: var(--color-neon-cyan) !important;
+    color: var(--color-neon-cyan) !important;
+}
+
+.btn-direct-download:hover, .btn-direct-download-details:hover {
+    background: var(--color-neon-cyan) !important;
+    color: var(--color-bg-deep) !important;
+    box-shadow: var(--shadow-neon-cyan) !important;
+}
+
+
