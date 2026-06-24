@@ -1,5 +1,5 @@
 // ==========================================================================
-// FIERRO & FILAMENTO - ADMINISTRATIVE CONTROL ROOM CORE LOGIC (ADMIN)
+// BOUTIQUE3D - ADMINISTRATIVE CONTROL ROOM CORE LOGIC (ADMIN)
 // ==========================================================================
 
 // --- Default Base Products ---
@@ -514,7 +514,7 @@ function renderOrdersTable() {
         });
 
         // WhatsApp buyer link
-        const buyerText = encodeURIComponent(`Hola, te contacto desde la administración de Fierro & Filamento sobre la orden ${order.id}.`);
+        const buyerText = encodeURIComponent(`Hola, te contacto desde la administración de Boutique3D sobre la orden ${order.id}.`);
         const waLink = `https://wa.me/5491132456789?text=${buyerText}`; // dummy contact phone
 
         const row = document.createElement("tr");
@@ -566,7 +566,7 @@ function setupBackupListeners() {
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(products, null, 4));
         const downloadAnchor = document.createElement('a');
         downloadAnchor.setAttribute("href", dataStr);
-        downloadAnchor.setAttribute("download", `fierro_filamento_inventario_${Date.now()}.json`);
+        downloadAnchor.setAttribute("download", `boutique3d_inventario_${Date.now()}.json`);
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
         downloadAnchor.remove();

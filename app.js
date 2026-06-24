@@ -1,5 +1,5 @@
 // ==========================================================================
-// FIERRO & FILAMENTO - STORE CORE LOGIC
+// BOUTIQUE3D - STORE CORE LOGIC
 // ==========================================================================
 
 // --- Web Audio Synthesizer (Retro Sounds) ---
@@ -521,7 +521,7 @@ ${item.title.substring(0, 20).padEnd(20)} ${item.quantity.toString().padStart(3)
     
     const paperContent = `
 <div class="invoice-header">
-    <h3>FIERRO & FILAMENTO</h3>
+    <h3>BOUTIQUE3D</h3>
     <p>EST. 2026 // DIESELPUNK FACTORY</p>
     <p>--- RECIBO DE OPERACIÓN ---</p>
 </div>
@@ -595,7 +595,7 @@ ${containsDownloads ? `
 
 function setupWhatsAppBtn(invoiceId, total) {
     // Generate text for WhatsApp
-    let waText = `🛠️ *Fierro & Filamento* 🛠️\n`;
+    let waText = `🛠️ *Boutique3D* 🛠️\n`;
     waText += `*Orden de Compra:* ${invoiceId}\n`;
     waText += `------------------------------------\n`;
     
@@ -622,7 +622,7 @@ function simulateDownload(filename) {
     AudioController.playClick();
     
     // Create temporary link to trigger text download
-    const blobContent = `--- FIERRO & FILAMENTO ---\nArchivo 3D: ${filename}\n\nEste es un archivo simulado para verificar la descarga de tu modelo 3D.\nEn producción, este archivo contendría el mesh STL final.`;
+    const blobContent = `--- BOUTIQUE3D ---\nArchivo 3D: ${filename}\n\nEste es un archivo simulado para verificar la descarga de tu modelo 3D.\nEn producción, este archivo contendría el mesh STL final.`;
     const blob = new Blob([blobContent], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     
