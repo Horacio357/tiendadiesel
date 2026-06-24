@@ -1,0 +1,564 @@
+/* ==========================================================================
+   FIERRO & FILAMENTO - ADMINISTRATIVE CONTROL PANEL STYLES (ADMIN)
+   ========================================================================== */
+
+:root {
+    --color-neon-green: #00ff66;
+    --color-neon-green-glow: rgba(0, 255, 102, 0.35);
+    --shadow-neon-green: 0 0 10px var(--color-neon-green-glow), inset 0 0 10px var(--color-neon-green-glow);
+}
+
+.admin-body {
+    background-color: #08090b !important;
+}
+
+.admin-container {
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 0 30px;
+    position: relative;
+    z-index: 5;
+}
+
+/* ==========================================================================
+   CONTROL LEVER TABS
+   ========================================================================== */
+.console-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.console-pill {
+    background: #111317;
+    border: 2px solid var(--color-iron-dark);
+    color: var(--color-text-muted);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 20px;
+    cursor: pointer;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: all var(--transition-speed);
+    text-transform: uppercase;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.02);
+}
+
+.console-pill:hover {
+    border-color: var(--color-steel);
+    color: var(--color-text-light);
+    background: #15181e;
+}
+
+.console-pill.active {
+    background: #181d26;
+    border-color: var(--color-neon-green);
+    color: var(--color-text-light);
+    box-shadow: var(--shadow-neon-green);
+}
+
+/* LED Indicator Widgets */
+.indicator-led {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #000;
+    transition: background var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.indicator-led.status-green {
+    background-color: var(--color-neon-green);
+    box-shadow: 0 0 10px var(--color-neon-green);
+}
+
+.indicator-led.status-off {
+    background-color: #3e0c0c;
+    box-shadow: none;
+}
+
+/* ==========================================================================
+   DASHBOARD STATS
+   ========================================================================== */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.metric-card {
+    background: #121418;
+    border: var(--border-metal);
+    padding: 25px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+}
+
+.metric-gauge-wrapper {
+    margin-bottom: 20px;
+}
+
+/* Simulated Vacuum Tube Indicator */
+.radial-gauge-green {
+    width: 120px;
+    height: 120px;
+    border: 3px double var(--color-neon-green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-neon-green);
+    background: radial-gradient(circle, rgba(0,255,102,0.03) 0%, transparent 80%);
+}
+
+.metric-value {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-neon-green);
+    text-shadow: 0 0 8px rgba(0, 255, 102, 0.5);
+}
+
+.metric-label {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+/* Panels active/hidden states */
+.admin-panel {
+    display: none;
+}
+
+.admin-panel.active {
+    display: block;
+}
+
+/* ==========================================================================
+   DETAILED ANALYTICS & TABLES
+   ========================================================================== */
+.stats-detailed-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+@media (max-width: 900px) {
+    .stats-detailed-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.stats-plate {
+    background: var(--color-bg-panel);
+    border: var(--border-metal);
+    padding: 30px;
+    border-radius: 6px;
+}
+
+.stats-plate h3 {
+    font-family: var(--font-display);
+    margin-bottom: 20px;
+    border-bottom: 1px dashed var(--color-iron-dark);
+    padding-bottom: 10px;
+}
+
+.neon-text-green {
+    color: var(--color-neon-green);
+    text-shadow: 0 0 8px rgba(0,255,102,0.5);
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    text-align: left;
+}
+
+.admin-table th {
+    font-family: var(--font-display);
+    color: var(--color-text-muted);
+    font-weight: bold;
+    border-bottom: 2px solid var(--color-iron-dark);
+    padding: 12px 10px;
+    font-size: 0.9rem;
+}
+
+.admin-table td {
+    padding: 14px 10px;
+    border-bottom: 1px solid rgba(42, 45, 52, 0.5);
+    color: var(--color-text-light);
+}
+
+.admin-table tbody tr:hover {
+    background-color: rgba(255,255,255,0.01);
+}
+
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Admin Table Thumbnail image */
+.admin-table-thumb {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    border: 1px solid var(--color-iron-dark);
+    border-radius: 4px;
+}
+
+/* Action Buttons inside tables */
+.btn-action {
+    background: transparent;
+    border: 1px solid var(--color-iron-dark);
+    color: var(--color-text-muted);
+    padding: 6px 12px;
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    border-radius: 4px;
+    transition: all var(--transition-speed);
+}
+
+.btn-action:hover {
+    border-color: var(--color-brass);
+    color: var(--color-brass);
+}
+
+.btn-action-danger {
+    color: var(--color-neon-orange);
+}
+
+.btn-action-danger:hover {
+    border-color: var(--color-neon-orange);
+    color: var(--color-bg-deep);
+    background-color: var(--color-neon-orange);
+    box-shadow: var(--shadow-neon-orange);
+}
+
+/* System Utilities plate */
+.system-utilities {
+    display: flex;
+    flex-direction: column;
+}
+
+.util-desc {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 35px;
+}
+
+.utility-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: auto;
+}
+
+.util-btn {
+    background: #1c1e24;
+    border: 2px solid var(--color-iron-dark);
+    color: var(--color-text-light);
+    font-family: var(--font-display);
+    padding: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    border-radius: 4px;
+    transition: all var(--transition-speed);
+}
+
+.util-btn:hover {
+    border-color: var(--color-brass);
+    color: var(--color-brass);
+}
+
+.util-btn.file-label {
+    display: block;
+    margin: 0;
+}
+
+.hidden-file-input {
+    display: none;
+}
+
+.btn-danger {
+    border-color: var(--color-neon-orange) !important;
+    color: var(--color-neon-orange) !important;
+}
+
+.btn-danger:hover {
+    background-color: var(--color-neon-orange) !important;
+    color: var(--color-bg-deep) !important;
+    box-shadow: var(--shadow-neon-orange) !important;
+}
+
+/* ==========================================================================
+   PRODUCT CRUD LAYOUT & FORMS
+   ========================================================================== */
+.products-grid-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 30px;
+}
+
+@media (max-width: 1024px) {
+    .products-grid-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form-plate, .list-plate, .orders-plate {
+    background: var(--color-bg-panel);
+    border: var(--border-metal);
+    padding: 30px;
+    border-radius: 6px;
+}
+
+.form-plate h3, .list-plate h3, .orders-plate h3 {
+    font-family: var(--font-display);
+    margin-bottom: 25px;
+    border-bottom: 1px dashed var(--color-iron-dark);
+    padding-bottom: 10px;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+@media (max-width: 500px) {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+
+.form-group label {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    letter-spacing: 1px;
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+    background: #0f1013;
+    border: 2px solid var(--color-iron-dark);
+    color: var(--color-text-light);
+    font-family: var(--font-sans);
+    font-size: 1.05rem;
+    padding: 10px 14px;
+    border-radius: 4px;
+    width: 100%;
+    transition: all var(--transition-speed);
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.form-group input:focus, 
+.form-group select:focus, 
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-neon-green);
+    box-shadow: var(--shadow-neon-green);
+}
+
+/* Specs Badge Generator */
+.specs-section {
+    border-top: 1px dashed var(--color-iron-dark);
+    padding-top: 20px;
+    margin-bottom: 30px;
+}
+
+.specs-section h4 {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+}
+
+.specs-input-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.specs-input-row input {
+    background: #0f1013;
+    border: 1px solid var(--color-iron-dark);
+    color: var(--color-text-light);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+}
+
+.add-spec-btn {
+    background-color: var(--color-brass);
+    color: var(--color-bg-deep);
+    border: none;
+    font-family: var(--font-display);
+    font-weight: bold;
+    padding: 0 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background var(--transition-speed);
+}
+
+.add-spec-btn:hover {
+    background-color: #dfba6b;
+}
+
+.specs-added-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+}
+
+.spec-badge {
+    background: #1d212a;
+    border: 1px solid var(--color-steel);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-remove-spec {
+    background: transparent;
+    border: none;
+    color: var(--color-neon-orange);
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.85rem;
+    line-height: 1;
+}
+
+/* Submit Actions */
+.form-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.form-submit-btn {
+    flex: 1;
+    background: var(--color-neon-green);
+    border: 2px solid var(--color-neon-green);
+    color: var(--color-bg-deep);
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all var(--transition-speed);
+    text-transform: uppercase;
+}
+
+.form-submit-btn:hover {
+    background: transparent;
+    color: var(--color-neon-green);
+    box-shadow: var(--shadow-neon-green);
+}
+
+.form-submit-btn.btn-danger {
+    background: var(--color-neon-orange);
+    border-color: var(--color-neon-orange);
+    color: var(--color-bg-deep);
+}
+
+.form-submit-btn.btn-danger:hover {
+    background: transparent;
+    color: var(--color-neon-orange);
+    box-shadow: var(--shadow-neon-orange);
+}
+
+/* ==========================================================================
+   ORDERS LOGS BITACORA
+   ========================================================================== */
+.orders-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    border-bottom: 1px dashed var(--color-iron-dark);
+    padding-bottom: 10px;
+}
+
+.orders-header-row h3 {
+    margin-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+/* Order item tags */
+.order-item-list {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+}
+
+.order-item-tag {
+    background: #171920;
+    border: 1px solid var(--color-iron-dark);
+    color: var(--color-text-light);
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin: 2px;
+    display: inline-block;
+}
+
+/* Status colors in logs */
+.status-badge {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.status-pendiente {
+    background-color: rgba(255, 85, 0, 0.15);
+    border: 1px solid var(--color-neon-orange);
+    color: var(--color-neon-orange);
+}
+
+.status-completado {
+    background-color: rgba(0, 255, 102, 0.15);
+    border: 1px solid var(--color-neon-green);
+    color: var(--color-neon-green);
+}

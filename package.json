@@ -1,0 +1,12 @@
+{
+  "name": "tienda-diesel-punk",
+  "version": "1.0.0",
+  "description": "Tienda digital y mecánica con estética Dieselpunk",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite"
+  },
+  "devDependencies": {
+    "vite": "^5.2.0"
+  }
+}

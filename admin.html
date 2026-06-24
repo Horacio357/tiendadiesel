@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuarto de Mandos | Fierro & Filamento</title>
+    <meta name="description" content="Estación central de administración e inventario para la tienda Fierro & Filamento.">
+    
+    <!-- Google Fonts: Share Tech Mono & Rajdhani -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <!-- Shared and Admin specific styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body class="diesel-theme admin-body">
+    <!-- Ambient Overlay -->
+    <div class="steam-overlay"></div>
+    <div class="dust-overlay"></div>
+
+    <!-- Admin Header -->
+    <header class="main-header admin-header" id="admin-header">
+        <div class="header-container">
+            <div class="logo-link">
+                <div class="logo-text">
+                    <span class="neon-text-orange">FIERRO</span>
+                    <span class="ampersand">&</span>
+                    <span class="neon-text-cyan">FILAMENTO</span>
+                </div>
+                <div class="sub-logo">CUARTO DE MANDOS // SISTEMA DE CONTROL DE INVENTARIO</div>
+            </div>
+            
+            <div class="header-controls">
+                <a href="index.html" class="sound-toggle-btn return-btn" id="btn-return-store" aria-label="Volver a la tienda principal" style="text-decoration: none;">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path fill="currentColor" d="M20,11H7.83L13.42,5.41L12,4L4,12L12,20L13.41,18.59L7.83,13H20V11Z" />
+                    </svg>
+                    <span>VOLVER A TIENDA</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Command Console -->
+    <main class="admin-container">
+        <!-- Control Lever Navigation -->
+        <section class="console-selector" id="console-tabs" aria-label="Selector de módulos de administración">
+            <button class="console-pill active" data-tab="tab-stats" id="pill-tab-stats">
+                <span class="indicator-led status-green"></span>
+                <span>TABLERO DE INSTRUMENTOS (ESTADÍSTICAS)</span>
+            </button>
+            <button class="console-pill" data-tab="tab-products" id="pill-tab-products">
+                <span class="indicator-led status-off"></span>
+                <span>VÁLVULA DE INVENTARIO (PRODUCTOS)</span>
+            </button>
+            <button class="console-pill" data-tab="tab-orders" id="pill-tab-orders">
+                <span class="indicator-led status-off"></span>
+                <span>BITÁCORA DE OPERACIONES (PEDIDOS)</span>
+            </button>
+        </section>
+
+        <!-- Dynamic Panels -->
+        <!-- PANEL 1: STATISTICS -->
+        <section class="admin-panel active" id="tab-stats" aria-live="polite">
+            <div class="dashboard-grid">
+                <!-- Gauges & Counters -->
+                <div class="metric-card">
+                    <div class="metric-gauge-wrapper">
+                        <div class="radial-gauge-green" id="gauge-revenue">
+                            <span class="metric-value" id="stat-revenue">$0.00</span>
+                        </div>
+                    </div>
+                    <div class="metric-label">CAJA TOTAL RECAUDADA</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-gauge-wrapper">
+                        <div class="radial-gauge-green" id="gauge-orders">
+                            <span class="metric-value" id="stat-orders-count">0</span>
+                        </div>
+                    </div>
+                    <div class="metric-label">VOLUMEN DE PEDIDOS</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-gauge-wrapper">
+                        <div class="radial-gauge-green" id="gauge-visits">
+                            <span class="metric-value" id="stat-visits-count">0</span>
+                        </div>
+                    </div>
+                    <div class="metric-label">VISITAS A LA TIENDA</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-gauge-wrapper">
+                        <div class="radial-gauge-green" id="gauge-conversion">
+                            <span class="metric-value" id="stat-conversion">0%</span>
+                        </div>
+                    </div>
+                    <div class="metric-label">TASA DE CONVERSIÓN</div>
+                </div>
+            </div>
+
+            <div class="stats-detailed-grid">
+                <!-- Top Products Table -->
+                <div class="stats-plate">
+                    <h3><span class="neon-text-green">RANKING DE PIEZAS SOLICITADAS</span></h3>
+                    <div class="table-wrapper">
+                        <table class="admin-table" id="top-products-table">
+                            <thead>
+                                <tr>
+                                    <th>PRODUCTO</th>
+                                    <th>CATEGORÍA</th>
+                                    <th>CANT. COMPRADA</th>
+                                    <th>INGRESOS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="top-products-tbody">
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Operations Console (Backup & General Utilities) -->
+                <div class="stats-plate system-utilities">
+                    <h3><span class="neon-text-orange">ESTACIÓN DE SISTEMA</span></h3>
+                    <p class="util-desc">Herramientas de mantenimiento para depurar la base de datos de productos e historial local.</p>
+                    
+                    <div class="utility-actions">
+                        <button class="util-btn" id="btn-export-db">RESPALDAR INVENTARIO (JSON)</button>
+                        
+                        <div class="import-wrapper">
+                            <label for="import-db-file" class="util-btn file-label">CARGAR RESPALDO (JSON)</label>
+                            <input type="file" id="import-db-file" accept=".json" class="hidden-file-input">
+                        </div>
+
+                        <button class="util-btn btn-danger" id="btn-reset-db">RESTABLECER A FÁBRICA</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANEL 2: PRODUCT MANAGEMENT -->
+        <section class="admin-panel" id="tab-products" aria-live="polite">
+            <div class="products-grid-layout">
+                <!-- Product Form (Add / Edit) -->
+                <div class="form-plate">
+                    <h3 id="form-action-title">Cargar Nueva Pieza</h3>
+                    <form id="product-form" novalidate>
+                        <input type="hidden" id="form-product-id">
+                        
+                        <div class="form-group">
+                            <label for="p-title">NOMBRE DE LA PIEZA</label>
+                            <input type="text" id="p-title" required placeholder="Ej. Mate Térmico Turbina v2">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="p-category">CATEGORÍA</label>
+                                <select id="p-category" required>
+                                    <option value="archivos">Archivos 3D (Descargable)</option>
+                                    <option value="mates">Mates Personalizados</option>
+                                    <option value="carteles">Carteles Luminosos</option>
+                                    <option value="macetas">Macetas</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="p-price">PRECIO ($)</label>
+                                <input type="number" id="p-price" required step="0.01" min="0" placeholder="0.00">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="p-desc">DESCRIPCIÓN DE LA PIEZA</label>
+                            <textarea id="p-desc" required placeholder="Escribe el detalle e historia de la pieza industrial..."></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="p-image">IMAGEN (URL / RUTA)</label>
+                                <select id="p-image">
+                                    <option value="assets/images/mate_dieselpunk.png">Imagen Mate Dieselpunk (Local)</option>
+                                    <option value="assets/images/cartel_luminoso.png">Imagen Cartel Luminoso (Local)</option>
+                                    <option value="assets/images/maceta_turbina.png">Imagen Maceta Turbina (Local)</option>
+                                    <option value="assets/images/archivo_3d_blueprint.png">Imagen Blueprint 3D (Local)</option>
+                                    <option value="custom">Ingresar URL Personalizada...</option>
+                                </select>
+                                <input type="text" id="p-image-custom" class="hidden" placeholder="https://ejemplo.com/foto.jpg">
+                            </div>
+                            <div class="form-group" id="download-file-group">
+                                <label for="p-download">ARCHIVO DE DESCARGA (.STL)</label>
+                                <input type="text" id="p-download" placeholder="modelo_3d.stl">
+                            </div>
+                        </div>
+
+                        <!-- Technical Specs Matrix -->
+                        <div class="specs-section">
+                            <h4>ESPECIFICACIONES TÉCNICAS (MATRIZ)</h4>
+                            <div class="specs-input-row">
+                                <input type="text" id="spec-key" placeholder="Parámetro (Ej: Peso)">
+                                <input type="text" id="spec-val" placeholder="Valor (Ej: 300g)">
+                                <button type="button" class="add-spec-btn" id="btn-add-spec">AGREGAR</button>
+                            </div>
+                            <ul class="specs-added-list" id="specs-list-container">
+                                <!-- Spec badges added here dynamically -->
+                            </ul>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="form-submit-btn" id="btn-submit-form">PRESURIZAR AL CATÁLOGO</button>
+                            <button type="button" class="form-submit-btn btn-danger hidden" id="btn-cancel-edit">CANCELAR EDICIÓN</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Products Table -->
+                <div class="list-plate">
+                    <h3>CATÁLOGO DE PRODUCTOS</h3>
+                    <div class="table-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>FOTO</th>
+                                    <th>PIEZA</th>
+                                    <th>CATEGORÍA</th>
+                                    <th>PRECIO</th>
+                                    <th>ACCIONES</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-tbody">
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANEL 3: ORDER LOGS -->
+        <section class="admin-panel" id="tab-orders" aria-live="polite">
+            <div class="orders-plate">
+                <div class="orders-header-row">
+                    <h3>REGISTRO CRONOLÓGICO DE OPERACIONES</h3>
+                    <button class="util-btn btn-danger" id="btn-clear-orders">VACIAR BITÁCORA</button>
+                </div>
+                <div class="table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>CÓDIGO PEDIDO</th>
+                                <th>FECHA Y HORA</th>
+                                <th>PIEZAS ADQUIRIDAS</th>
+                                <th>TOTAL FACTURADO</th>
+                                <th>ESTADO</th>
+                                <th>ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-tbody">
+                            <!-- Loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Custom Administrative Logic -->
+    <script src="admin.js"></script>
+</body>
+</html>
