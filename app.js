@@ -671,7 +671,7 @@ function setupWhatsAppBtn(invoiceId, total, hasPaymentLinks) {
     
     const encodedText = encodeURIComponent(waText);
     // Dummy whatsapp phone number
-    const phoneNumber = "5491132456789"; 
+    const phoneNumber = "5493816253809"; 
     
     invoiceWhatsappBtn.onclick = () => {
         AudioController.playClick();

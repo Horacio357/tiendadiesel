@@ -638,7 +638,7 @@ function renderOrdersTable() {
 
         // WhatsApp buyer link
         const buyerText = encodeURIComponent(`Hola, te contacto desde la administración de Boutique3D sobre la orden ${order.id}.`);
-        const waLink = `https://wa.me/5491132456789?text=${buyerText}`; // dummy contact phone
+        const waLink = `https://wa.me/5493816253809?text=${buyerText}`; // dummy contact phone
 
         const row = document.createElement("tr");
         row.innerHTML = `
