@@ -20,6 +20,25 @@
     <div class="steam-overlay"></div>
     <div class="dust-overlay"></div>
 
+    <!-- Admin Login Overlay -->
+    <div id="admin-login-overlay" class="login-overlay">
+        <div class="login-card">
+            <div class="login-logo">
+                <span class="neon-text-orange">BOUTIQUE</span>
+                <span class="neon-text-cyan">3D</span>
+                <div style="font-size: 0.8rem; letter-spacing: 2px; color: var(--color-text-muted); margin-top: 5px;">CUARTO DE MANDOS</div>
+            </div>
+            <h2 class="login-title">ACCESO RESTRINGIDO</h2>
+            <p class="login-desc">Introduce la clave de seguridad para iniciar los generadores y habilitar los mandos.</p>
+            <div class="login-field">
+                <input type="password" id="admin-password-input" placeholder="CLAVE DE ACCESO" autofocus>
+                <div class="login-error" id="login-error-msg">Código de autorización no válido</div>
+            </div>
+            <button class="login-btn" id="btn-login-submit">CONECTAR SISTEMA</button>
+            <a href="index.html" class="login-back-btn">VOLVER A TIENDA</a>
+        </div>
+    </div>
+
     <!-- Admin Header -->
     <header class="main-header admin-header" id="admin-header">
         <div class="header-container">

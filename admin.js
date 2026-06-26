@@ -236,13 +236,77 @@ function showToast(message, type = 'success') {
 
 // --- Initializing Admin Panel ---
 function init() {
-    loadDatabase();
-    setupNavigation();
-    renderStats();
-    renderProductsTable();
-    renderOrdersTable();
-    setupFormEventListeners();
-    setupBackupListeners();
+    const isAuthorized = sessionStorage.getItem("admin_authorized") === "true";
+    const overlay = document.getElementById("admin-login-overlay");
+    const header = document.getElementById("admin-header");
+    const container = document.querySelector(".admin-container");
+
+    if (isAuthorized) {
+        if (overlay) overlay.style.display = "none";
+        if (header) header.style.display = "";
+        if (container) container.style.display = "";
+        
+        loadDatabase();
+        setupNavigation();
+        renderStats();
+        renderProductsTable();
+        renderOrdersTable();
+        setupFormEventListeners();
+        setupBackupListeners();
+    } else {
+        if (overlay) overlay.style.display = "flex";
+        if (header) header.style.display = "none";
+        if (container) container.style.display = "none";
+        
+        setupLoginListeners();
+    }
+}
+
+function setupLoginListeners() {
+    const overlay = document.getElementById("admin-login-overlay");
+    const header = document.getElementById("admin-header");
+    const container = document.querySelector(".admin-container");
+    const passwordInput = document.getElementById("admin-password-input");
+    const submitBtn = document.getElementById("btn-login-submit");
+    const errorMsg = document.getElementById("login-error-msg");
+
+    function attemptLogin() {
+        const password = passwordInput.value;
+        if (password === "masita_sakura3") {
+            sessionStorage.setItem("admin_authorized", "true");
+            
+            overlay.style.display = "none";
+            header.style.display = "";
+            container.style.display = "";
+            
+            loadDatabase();
+            setupNavigation();
+            renderStats();
+            renderProductsTable();
+            renderOrdersTable();
+            setupFormEventListeners();
+            setupBackupListeners();
+            
+            showToast("Acceso autorizado. Caldera presurizada.", "success");
+        } else {
+            errorMsg.style.display = "block";
+            passwordInput.value = "";
+            passwordInput.focus();
+            
+            const card = document.querySelector(".login-card");
+            card.classList.add("shake-animation");
+            setTimeout(() => {
+                card.classList.remove("shake-animation");
+            }, 500);
+        }
+    }
+
+    submitBtn.addEventListener("click", attemptLogin);
+    passwordInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            attemptLogin();
+        }
+    });
 }
 
 // --- Load / Reload Data from localStorage ---
